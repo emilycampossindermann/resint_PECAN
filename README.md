@@ -3,7 +3,7 @@ This repository includes all work done within my research internship project on 
 
 The repository containts:
 * research internship proposal 
-* data files 
+* data files (raw data and preprocessed data)
 * preprocessing and analysis scripts
 * plots (the files with the ending "extra" were not included in the report)
 * research internship report. 
