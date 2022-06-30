@@ -38,10 +38,19 @@ for (Id in descriptive_data_TRT$ID){
   
   matrix <- data.matrix(subset_id) # transform data frame to matrix
   matrix <- t(matrix)
+  "Unknown" %in% subset_id$Item
   
-  # network density n*3
-  descriptive_data_TRT$network_density_new[which(descriptive_data_TRT$ID == Id)] <- 
-    round(length(matrix[matrix > 0]) / (3*descriptive_data_TRT$Prio.Problems[descriptive_data_TRT$ID == Id]),2)
+  # network density 
+  subset_density <- network_data_TRT %>% filter(ID == Id) %>% filter(Presence == 1)
+  if ("Unknown" %in% subset_density$Item){
+    # if Unknown present as a cause the maximum number of edges is (n-1)*4
+    descriptive_data_TRT$network_density_new[which(descriptive_data_TRT$ID == Id)] <-
+      round(length(matrix[matrix > 0]) / (4*(descriptive_data_TRT$Prio.Problems[descriptive_data_TRT$ID == Id] -1)),2)
+  } else {
+    # If Unknown is not present as a cause the maximum number of edges is n*3
+    descriptive_data_TRT$network_density_new[which(descriptive_data_TRT$ID == Id)] <- 
+      round(length(matrix[matrix > 0]) / (3*descriptive_data_TRT$Prio.Problems[descriptive_data_TRT$ID == Id]),2)
+  }
   
   # identify loops containing between 3 and 5 edges 
   loops <- find_loops(matrix, max_num_loops = 2000)
